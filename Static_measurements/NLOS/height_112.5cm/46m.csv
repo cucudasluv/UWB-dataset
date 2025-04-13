@@ -1,0 +1,2 @@
+timestamp,Transmission #,Reception #,maxNoise,Distance,Channel,FirstPathAmp1,FirstPathAmp2,FirstPathAmp3,Max Growth CIR,Rx Preamble Count,Standard Noise,RSSI(dBm),RSSI_fp(dBm),rtd_init,rtd_resp,resp_rx_ts,poll_tx_ts,resp_tx_ts,poll_rx_ts,anchor_id
+1726036201.22752,18385,16067,600,46.457111,5,2559,4243,3057,345,230,40,-100,-92.69,72124024,72105944,-2059718620,-2131842644,-865228165,-937334109,12
