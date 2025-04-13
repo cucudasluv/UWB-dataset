@@ -1,5 +1,6 @@
 # Comprehensive outdoor UWB dataset: Static and dynamic measurements in LOS/NLOS environments
-This outdoor UWB dataset is proposed to support the researcher of UWB-based localization conbined with IMU(Inertia-Measurement-Unit).
+This outdoor UWB dataset s designed to support research on **UWB-based localization**. This dataset includes synchronized **UWB/IMU/GNSS** data 
+along with RTK-corrected GNSS measurements serving as high-precision reference for evaluating localization performance.
 The dataset was collected by ADIP(Applied Dynamics & Intelligent Prognosis)-laboratory at Hanyang University’s Engineering Center in South Korea.
 
 # Data structure
