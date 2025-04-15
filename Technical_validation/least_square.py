@@ -17,7 +17,7 @@ from collections import defaultdict
 import threading
 from scipy.optimize import least_squares
 
-# 최소자승법을 위한 잔차 계산 함수
+# Calculate residuals for least squares optimization
 def residuals(params, valid_anchor_positions, anchor_distances):
     x, y, z = params
     res = []
@@ -26,7 +26,7 @@ def residuals(params, valid_anchor_positions, anchor_distances):
         res.append(np.sqrt((x - ax)**2 + (y - ay)**2 + (z - az)**2) - d)
     return res
 
-# 위치 계산 함수
+# Compute tag position using least squares optimization
 def compute_position(valid_anchor_positions, anchor_distances, initial_guess):
     result = least_squares(residuals, initial_guess, args=(valid_anchor_positions, anchor_distances))
     return result.x
@@ -38,10 +38,7 @@ class ESKFLocalizer:
         rospy.init_node('eskf_localizer', anonymous=True)
 
         # Publishers
-        self.pose_pub = rospy.Publisher('/dwm1001/leastsqureonly', PoseStamped, queue_size=10)
-        self.odom_pub = rospy.Publisher('/dwm1001/odomleastsqureonly', Odometry, queue_size=10)
-        # self.marker_pub = rospy.Publisher('/eskf_localizer/markers', Marker, queue_size=10)
-
+        self.pose_pub = rospy.Publisher('/dwm1001/least_square', PoseStamped, queue_size=10)
 
         self.current_time = None
         # Initialize ESKF
@@ -49,7 +46,7 @@ class ESKFLocalizer:
         self.current_step = 1
         self.lock = threading.Lock()
 
-        # Data structures for UWB
+        # Initialize data structures for UWB anchors and measurements
         self.anchor_positions = {}  # anchor_id -> (x, y, z)
         self.anchor_distances = {}
         self.connection_status = defaultdict(lambda: {'last_seen': 0, 'status': 0, 'rssi_dev': 0})
@@ -66,7 +63,7 @@ class ESKFLocalizer:
             rospy.Subscriber(topic, Anchor, self.anchor_callback, callback_args=anchor_id)
 
         # Initialize CSV file for logging
-        self.csv_file = open('leastsquare_log.csv', 'w', newline='')  # CSV 파일 열기
+        self.csv_file = open('LS.csv', 'w', newline='')  # CSV 파일 열기
         self.csv_writer = csv.writer(self.csv_file)
         self.csv_writer.writerow(['timestamp', 'x', 'y', 'z'])  # 헤더 작성
 
@@ -78,7 +75,7 @@ class ESKFLocalizer:
 
 
     def shutdown_hook(self):
-        # 닫을 때 CSV 파일을 닫기
+        # Close CSV file on shutdown
         rospy.loginfo("Shutting down. Closing CSV file.")
         self.csv_file.close()
 
@@ -135,7 +132,7 @@ class ESKFLocalizer:
             valid_anchor_distances = {aid: dist for aid, dist in self.anchor_distances.items() if self.connection_status[aid]['status'] == 1}
             valid_anchor_positions = {aid: pos for aid, pos in self.anchor_positions.items() if aid in valid_anchor_distances}
 
-            # Perform correction step if enough measurements are available
+            # Calculate tag position if enough valid measurements exist
             if len(valid_anchor_distances) >= 3:
                 try:
                     tag_position = compute_position(valid_anchor_positions, valid_anchor_distances, self.initial_guess)
@@ -143,7 +140,7 @@ class ESKFLocalizer:
                     rospy.logwarn(f"ESKF correction failed: {e}")
 
                 pose_msg = PoseStamped()
-                pose_msg.header.stamp = rospy.Time.now()
+                pose_msg.header.stamp = self.current_time
                 pose_msg.header.frame_id = "map"
                 pose_msg.pose.position.x = tag_position[0]
                 pose_msg.pose.position.y = tag_position[1]
@@ -155,18 +152,13 @@ class ESKFLocalizer:
 
                 self.pose_pub.publish(pose_msg)
                 self.initial_guess = tag_position
-                # 기록할 데이터: timestamp, x, y, z
+                # Log position data to CSV
                 timestamp = self.current_time
                 x, y, z = tag_position[0], tag_position[1], tag_position[2]
-                self.csv_writer.writerow([timestamp, x, y, z])  # CSV 파일에 데이터 기록
-                self.csv_file.flush()  # 데이터를 즉시 디스크에 기록
+                self.csv_writer.writerow([timestamp, x, y, z])
+                self.csv_file.flush()
 
 
-                odom_msg = Odometry()
-                odom_msg.pose.pose = pose_msg.pose
-                odom_msg.header = pose_msg.header
-                
-                self.odom_pub.publish(odom_msg)
 
 
 # ------------------ Signal Handler ------------------ #

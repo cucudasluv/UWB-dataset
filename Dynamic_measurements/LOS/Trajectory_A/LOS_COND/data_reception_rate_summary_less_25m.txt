@@ -1,4 +1,0 @@
-Data Reception Rate Summary
-==================================================
-
-No valid data to calculate overall average reception rate.
