@@ -3,10 +3,12 @@ This outdoor UWB dataset s designed to support research on **UWB-based localizat
 along with RTK-corrected GNSS measurements serving as high-precision reference for evaluating localization performance.
 The dataset was collected by ADIP(Applied Dynamics & Intelligent Prognosis)-laboratory at **Hanyang University’s Engineering Center** in **South Korea**.
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15225966.svg)](https://doi.org/10.5281/zenodo.15225966)
+
 
 # Data structure
 ![Image](https://github.com/user-attachments/assets/3a01da78-4d55-42c6-92c4-c5e0648f84cb)
-
+DOI_URL: **https://doi.org/10.5281/zenodo.15225966**
 
 # Quick start
 
