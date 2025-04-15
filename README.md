@@ -9,7 +9,22 @@ The dataset was collected by ADIP(Applied Dynamics & Intelligent Prognosis)-labo
 
 
 # Quick start
--For real-time localization
 
+**Prerequisite**
 
-# Dependencies
+1. ROS(Noetic) installation 
+2. **custom_msg** package involved in this URL should be installed by **catkin_make**.
+
+## For real-time localization(ROS)
+
+    rosrun Technical_validation least_square.py
+    rosrun Technical_validation eskf.py
+
+## For static data analysis
+
+    python3 ranging_error_analysis.py --data_path /path/to/data/Static_measurements
+    python3 RSS_analysis.py --data_path /path/to/data/Static_measurements
+
+## For dynamic(ESKF & LS) data analysis
+
+    python3 localization_error_analysis.py --data_path /path/to/data/.../Case_1 --trajectory_type A
