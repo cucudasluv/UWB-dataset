@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(custom_msg)
+project(localizer_dwm1001)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,9 +8,6 @@ project(custom_msg)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  dynamic_reconfigure
-  roscpp
-  rospy
   std_msgs
   geometry_msgs
   message_generation
@@ -59,16 +56,6 @@ add_message_files(
    Uwbpose.msg
  )
 
-## Generate services in the 'srv' folder
- add_service_files(
-   FILES
-   Anchor_0.srv
-   Anchor_1.srv
-   Anchor_2.srv
-   Anchor_3.srv
-   Tag_srv.srv
-#   Service2.srv
- )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -98,10 +85,6 @@ generate_messages(
 ##   * uncomment the "generate_dynamic_reconfigure_options" section below
 ##     and list every .cfg file to be processed
 
-## Generate dynamic reconfigure parameters in the 'cfg' folder
-#generate_dynamic_reconfigure_options(
-#    cfg/DWM1001_Tune_Serial.cfg
-#)
 
 
 ###################################
